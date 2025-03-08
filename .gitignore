@@ -1,0 +1,30 @@
+# Environment variables and credentials
+.env
+google_credentials.json
+
+# Python virtual environment
+.venv/
+venv/
+
+# Compiled Python files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Logs and debug files
+*.log
+logs/
+debug.log
+
+# IDE and editor settings
+.vscode/
+.idea/
+*.iml
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+# Dependencies
+node_modules/
