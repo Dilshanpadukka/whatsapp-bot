@@ -1,16 +1,20 @@
-import gspread
-from oauth2client.service_account import ServiceAccountCredentials
+from flask import Flask, request
+from twilio.twiml.messaging_response import MessagingResponse
+from utils.spreadsheet import save_inquiry
+
+app = Flask(__name__)
+
+@app.route("/webhook", methods=["POST"])
+def webhook():
+    incoming_msg = request.values.get("Body", "").strip()
+    sender = request.values.get("From", "")
+
+    save_inquiry(sender, incoming_msg)
+
+    response = MessagingResponse()
+    response.message("✅ Your inquiry has been saved. We will get back to you soon!")
+
+    return str(response)
 
 if __name__ == "__main__":
-    # use credentials to create a client to interact with the Google Drive API
-    scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-    creds = ServiceAccountCredentials.from_json_keyfile_name("google_credentials.json", scope)
-    client = gspread.authorize(creds)
-
-    # Find a workbook by name and open the first sheet
-    # Make sure you use the right name here.
-    sheet = client.open("WhatsApp-Bot").sheet1
-
-    # Extract and print all of the values
-    list_of_lists = sheet.get_all_records()
-    print(list_of_lists)
+    app.run(debug=True, port=5000)
